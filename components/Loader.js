@@ -135,7 +135,7 @@ export default function Loader({ onDone }) {
         {size.w > 0 && (
           <BarField
             mode="text"
-            text="CAPITAL"
+            text="RENTAL.BA"
             width={size.w}
             height={size.h}
             barGap={5}
