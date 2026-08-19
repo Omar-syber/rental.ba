@@ -833,7 +833,14 @@ p { margin: 0; }
 /* ===================================================================
    Prologue (scroll-lit reveal text)
    =================================================================== */
-.prologue { padding: 130px 32px; background: var(--ink); position: relative; overflow: hidden; }
+/* Same technique as .papercut's own overlap onto Hero: .papercut__gallery-pin
+   is a 100dvh sticky pin, so the last viewport's worth of its wrapper's
+   scroll range is spent with the pin already unstuck and scrolling away
+   underneath — mostly empty space below where its content actually sits.
+   Pulling Prologue up to paint over that tail (later DOM order already wins
+   the paint order, no z-index needed) hides the gap instead of leaving a
+   blank strip between the paper-cut scene and this section. */
+.prologue { padding: 130px 32px; background: var(--ink); position: relative; overflow: hidden; margin-top: -26vh; }
 .prologue__inner { position: relative; z-index: 1; max-width: 980px; width: 100%; margin: 0 auto; }
 .reveal-text {
   font-family: var(--font-editorial);

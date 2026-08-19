@@ -133,6 +133,21 @@ export default function DiagonalMarqueeCarousel({
   const rowCards = [...cards, ...cards, ...cards];
   const rowCardsReverse = [...rowCards].reverse();
 
+  // openCard sets document.body.style.overflow = "hidden" imperatively, and
+  // the only other place that clears it is closeCard's animation-complete
+  // callback. If a card is left open and the visitor navigates away via a
+  // link inside it (e.g. "View neighborhood") instead of closing it first,
+  // this component unmounts without ever running that callback — leaving
+  // body.style.overflow stuck on "hidden" for the rest of the session,
+  // which silently breaks position:sticky everywhere (body is an ancestor
+  // of every sticky-pinned element on every subsequent page). Clear it
+  // unconditionally on unmount as a safety net.
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const openCard = (card: CardItem, el: HTMLDivElement) => {
     flipStateRef.current = Flip.getState(el, { props: "borderRadius" });
     containerRef.current?.classList.add("is-frozen");
