@@ -840,7 +840,13 @@ p { margin: 0; }
    Pulling Prologue up to paint over that tail (later DOM order already wins
    the paint order, no z-index needed) hides the gap instead of leaving a
    blank strip between the paper-cut scene and this section. */
-.prologue { padding: 130px 32px; background: var(--ink); position: relative; overflow: hidden; margin-top: -26vh; }
+/* z-index: 2, not just later DOM order: .papercut sets z-index: 1 on
+   itself (for its own mask/mountain children), and an element with an
+   explicit z-index beats a later sibling that has none regardless of DOM
+   order — without this, .papercut's still-white background painted over
+   this overlap instead of the other way around, slicing the reveal text
+   in half where the two sections met. */
+.prologue { padding: 130px 32px; background: var(--ink); position: relative; z-index: 2; overflow: hidden; margin-top: -26vh; }
 .prologue__inner { position: relative; z-index: 1; max-width: 980px; width: 100%; margin: 0 auto; }
 .reveal-text {
   font-family: var(--font-editorial);
