@@ -1,0 +1,25 @@
+/* Tailwind is scoped to utility classes only (no preflight/base reset) so
+   it can't clobber the site's existing hand-written CSS in globals.css —
+   it exists purely to support components ported verbatim from Tailwind
+   registries, like components/ui/card-fan-carousel.tsx. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* This site is permanently dark-themed (not OS-preference-adaptive), so
+   force Tailwind's `dark:` variant on via a class rather than
+   prefers-color-scheme — see the `dark` class on <html> in layout.js. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Marquee keyframes (components/ui/marquee.tsx, used by components/ui/team.tsx). */
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--gap))); }
+}
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-100% - var(--gap))); }
+}
