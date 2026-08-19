@@ -169,7 +169,15 @@ export default function HeroPaperCut() {
       const galleryTrigger = {
         trigger: galleryWrapRef.current,
         start: "top top",
-        end: "bottom top",
+        // Same fix as Hero.js: .papercut__gallery-pin is a 100dvh sticky
+        // pin inside a much taller wrapper, so it releases one viewport
+        // early relative to the wrapper's full height — matching the
+        // trigger's end to the wrapper's *full* height let the fly-through
+        // timeline keep counting up after the pin had already unstuck and
+        // started scrolling away, which is what left the last photo(s)
+        // scrolling off before their exit animation actually finished
+        // (the empty gap before Prologue).
+        end: () => `+=${galleryWrapRef.current.offsetHeight - window.innerHeight}`,
         scrub: 0.6,
       };
 

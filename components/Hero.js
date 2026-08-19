@@ -84,7 +84,14 @@ export default function Hero() {
         scrollTrigger: {
           trigger: wrapRef.current,
           start: "top top",
-          end: "bottom top",
+          // Not "bottom top": .hero__pin only stays stuck (position: sticky)
+          // for (wrapper height - one viewport), since the pin itself is
+          // exactly 100dvh tall — spanning the trigger's full height would
+          // let this scrub timeline keep animating for one viewport's worth
+          // of scroll *after* the pin has already released and started
+          // scrolling away underneath HeroPaperCut, which is what produced
+          // the "content never finishes shrinking/fading" glitch.
+          end: () => `+=${wrapRef.current.offsetHeight - window.innerHeight}`,
           scrub: 0.6,
         },
       });
